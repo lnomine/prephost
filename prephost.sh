@@ -47,5 +47,9 @@ pkill dhclient
 ip addr del ${link} dev ${interface} ; systemctl restart networking
 fi
 
+### role management
+
+/tmp/role.sh "$1" "$2"
+
 #cleanup
 rm -r /root/*
