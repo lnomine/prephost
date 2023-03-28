@@ -26,9 +26,9 @@ chmod 600 /root/.ssh/authorized_keys
 systemctl restart sshd
 
 ### regular sources
-echo "deb http://deb.debian.org/debian bullseye main contrib non-free" > /etc/apt/sources.list
-echo "deb http://security.debian.org/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list
-echo "deb http://deb.debian.org/debian bullseye-updates main contrib non-free" >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian bookworm main contrib non-free" > /etc/apt/sources.list
+echo "deb http://security.debian.org/debian-security bookworm-security main contrib non-free" >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free" >> /etc/apt/sources.list
 
 ### no more debconf static/hacked
 grep dhclient /etc/crontab
@@ -49,7 +49,7 @@ fi
 
 ### role management
 
-/tmp/role.sh "$1" "$2"
+/tmp/role.sh "$1"
 
 #cleanup
-rm -r /root/*
+rm -rf /root/debi *.zip
