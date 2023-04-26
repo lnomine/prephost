@@ -1,5 +1,10 @@
 #!/bin/bash
 
+### regular sources
+echo "deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list
+echo "deb http://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware" >> /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list
+
 apt update ; apt install -y gdisk parted curl ca-certificates systemd-timesyncd
 projects=std-vars
 mkdir ${projects} && curl -o ${projects}/${projects}.sh https://raw.githubusercontent.com/lnomine/${projects}/master/${projects}.sh
@@ -24,11 +29,6 @@ echo $rootpubrsa > /root/.ssh/authorized_keys
 chmod 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys
 systemctl restart sshd
-
-### regular sources
-echo "deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list
-echo "deb http://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware" >> /etc/apt/sources.list
-echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list
 
 ### no more debconf static/hacked
 grep dhclient /etc/crontab
