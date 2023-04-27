@@ -16,6 +16,8 @@ wipefs --all -f /dev/${disk}2
 sgdisk -d 2 /dev/${disk}
 partprobe /dev/${disk}
 sed -i '/swap/d' /etc/fstab
+rm /etc/initramfs-tools/conf.d/resume
+update-initramfs -u
 
 ### what time is it ?
 echo "[Time]" > /etc/systemd/timesyncd.conf
@@ -29,23 +31,6 @@ echo $rootpubrsa > /root/.ssh/authorized_keys
 chmod 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys
 systemctl restart sshd
-
-### no more debconf static/hacked
-grep dhclient /etc/crontab
-if [ $? -eq 0 ];
-then
-sed -i '/dhclient/d' /etc/crontab
-echo "auto lo" > /etc/network/interfaces
-echo "iface lo inet loopback" >> /etc/network/interfaces
-echo "auto $interface" >> /etc/network/interfaces
-echo "iface $interface inet static" >> /etc/network/interfaces
-echo "address $ip" >> /etc/network/interfaces
-echo "netmask $netmask" >> /etc/network/interfaces
-echo "gateway $gateway" >> /etc/network/interfaces
-echo "dns-nameservers $dns" >> /etc/network/interfaces
-pkill dhclient
-ip addr del ${link} dev ${interface} ; systemctl restart networking
-fi
 
 ### role management
 
