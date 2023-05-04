@@ -7,10 +7,12 @@ apt update ; apt install screen unzip curl cockpit cockpit-machines -y
 cd /usr/local/bin || exit ; curl -LO https://releases.hashicorp.com/terraform/${version}/${target}
 unzip ${target} && rm -r ${target}
 chmod +x terraform
+virsh net-undefine default
 
-until virsh net-undefine default ; virsh net-destroy default ; virsh pool-undefine default ; virsh pool-destroy default; do
-echo "Removing default settings..."
-done
+### Uncomment if the host isn't fresh
+#until virsh net-destroy default ; virsh pool-undefine default ; virsh pool-destroy default; do
+#echo "Removing default settings..."
+#done
 
 cat <<- 'EOF' > /etc/libvirt/hooks/qemu
 #!/bin/bash
