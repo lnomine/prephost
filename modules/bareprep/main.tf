@@ -3,7 +3,6 @@ variable vm {}
 variable disksize {}
 variable cpu {}
 variable mem {}
-variable ip {}
 
 terraform {
   required_providers {
@@ -57,8 +56,6 @@ resource "libvirt_domain" "vm" {
 
   network_interface {
     network_name   = var.network
-    hostname       = var.vm
-    addresses      = ["${var.ip}"]
   }
 
   graphics {
