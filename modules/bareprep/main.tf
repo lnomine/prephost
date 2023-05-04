@@ -56,7 +56,6 @@ resource "libvirt_volume" "volume" {
 }
 
 resource "null_resource" "resize" {
-      
  provisioner "local-exec" {
   command = "qemu-img resize /var/lib/libvirt/images/${var.vm}.qcow2 +${var.disksize -2}G"
   }
