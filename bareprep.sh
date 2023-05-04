@@ -17,7 +17,6 @@ virsh net-undefine default
 cat <<- 'EOF' > /etc/libvirt/hooks/qemu
 #!/bin/bash
 
-interface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)')
 export env VMNAME=${1}
 screen -dmS ip bash -c "sleep 20 ; virsh domifaddr ${1} | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' > /etc/${1}"
 
@@ -30,10 +29,12 @@ fi
 
 if [ "${2}" = "stopped" ] || [ "${2}" = "reconnect" ]; then
 export GUEST_IP=$(cat /etc/${1})
+export interface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)')
 iptables -t nat -D PREROUTING -i ${interface} $RESTRICT $HOST_PORT -j DNAT --to ${GUEST_IP}${GUEST_PORT}
 fi
 
 if [ "${2}" = "start" ] || [ "${2}" = "reconnect" ]; then
+export interface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)')
 screen -dmS nat bash -c 'sleep 25 ; export GUEST_IP=$(cat /etc/${VMNAME}) ; iptables -t nat -I PREROUTING -i ${interface} $RESTRICT $HOST_PORT -j DNAT --to ${GUEST_IP}${GUEST_PORT}'
 fi
 EOF
