@@ -9,7 +9,7 @@ unzip ${target} && rm -r ${target}
 chmod +x terraform
 virsh net-undefine default
 
-cat <<- EOF > /etc/libvirt/hooks/qemu
+cat <<- 'EOF' > /etc/libvirt/hooks/qemu
 #!/bin/bash
 
 interface=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)')
@@ -36,4 +36,5 @@ EOF
 chmod +x /etc/libvirt/hooks/qemu
 sed -i 's/#security_driver = "selinux"/security_driver = "none"/g' /etc/libvirt/qemu.conf && systemctl restart libvirtd
 
+cd -
 terraform init && terraform apply --auto-approve
