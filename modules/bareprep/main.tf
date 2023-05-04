@@ -1,3 +1,4 @@
+variable network {}
 variable vm {}
 variable disksize {}
 variable cpu {}
@@ -55,7 +56,7 @@ resource "libvirt_domain" "vm" {
   }
 
   network_interface {
-    network_name = libvirt_network.open.name
+    network_name   = var.network
     hostname       = var.vm
     addresses      = ["${var.ip}"]
   }
