@@ -1,4 +1,3 @@
-variable tplhost {}
 variable vm {}
 variable disksize {}
 variable cpu {}
@@ -18,32 +17,9 @@ provider "libvirt" {
   uri = "qemu:///system"
 }
 
-resource "libvirt_network" "open" {
-  name = "default"
-  mode = "open"
-  addresses = ["192.168.122.0/24"]
-  dhcp {
-   enabled = true
-  }
-
- provisioner "local-exec" {
-  command = "cd /var/lib/libvirt/images/ ; curl -LO http://${var.tplhhost}/template.qcow2"
-  }
-}
-
-resource "libvirt_pool" "default" {
-  name = "default"
-  type = "dir"
-  path = "/var/lib/libvirt/images"
-}
-
 resource "libvirt_volume" "source" {
   name   = "${var.vm}.qcow2"
   source = "/var/lib/libvirt/images/template.qcow2"
-
-  depends_on = [
-    libvirt_network.open,libvirt_pool.default
-  ]
 }
 
 resource "libvirt_volume" "volume" {
@@ -81,7 +57,7 @@ resource "libvirt_domain" "vm" {
   network_interface {
     network_name = libvirt_network.open.name
     hostname       = var.vm
-    addresses      = var.ip
+    addresses      = ["${var.ip}"]
   }
 
   graphics {
@@ -93,10 +69,4 @@ resource "libvirt_domain" "vm" {
   depends_on = [
     null_resource.resize
   ]
-}
-
-resource "null_resource" "routing" {
-  provisioner "local-exec" {
-    command = "iptables -t nat -A POSTROUTING -j MASQUERADE && sysctl -w net.ipv6.conf.all.disable_ipv6=1"
-  }
 }
