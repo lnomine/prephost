@@ -1,4 +1,3 @@
-variable network {}
 variable vm {}
 variable disksize {}
 variable cpu {}
@@ -55,7 +54,8 @@ resource "libvirt_domain" "vm" {
   }
 
   network_interface {
-    network_name   = var.network
+    network_name = "default"
+    wait_for_lease = true
   }
 
   graphics {
