@@ -1,6 +1,3 @@
-variable ip {
-  nullable = true
-}
 variable mac {
   nullable = true
 }
@@ -96,9 +93,7 @@ resource "libvirt_domain" "vm-direct" {
   }
 
   network_interface {
-    network_name = "default"
     macvtap = var.interface
-    addresses = ["${var.ip}"]
     mac = var.mac
   }
 
