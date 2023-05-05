@@ -1,3 +1,11 @@
+variable ip {
+  nullable = true
+}
+variable mac {
+  nullable = true
+}
+
+variable interface {}
 variable vm {}
 variable disksize {}
 variable cpu {}
@@ -40,7 +48,9 @@ resource "null_resource" "resize" {
   ]
 }
 
-resource "libvirt_domain" "vm" {
+resource "libvirt_domain" "vm-virtual" {
+
+  count = var.interface == "virtual" ? 1 : 0
   name = var.vm
   memory = var.mem
   vcpu = var.cpu
@@ -56,6 +66,40 @@ resource "libvirt_domain" "vm" {
   network_interface {
     network_name = "default"
     wait_for_lease = true
+  }
+
+  graphics {
+    type = "vnc"
+    listen_type = "address"
+    websocket = "-1"
+  }
+
+  depends_on = [
+    null_resource.resize
+  ]
+}
+
+resource "libvirt_domain" "vm-direct" {
+
+  count = var.interface != "virtual" ? 1 : 0
+  name = var.vm
+  memory = var.mem
+  vcpu = var.cpu
+  qemu_agent = true
+
+  cpu {
+    mode = "host-passthrough"
+  }
+
+  disk {
+    volume_id = libvirt_volume.volume.id
+  }
+
+  network_interface {
+    network_name = "default"
+    macvtap = var.interface
+    addresses = ["${var.ip}"]
+    mac = var.mac
   }
 
   graphics {
