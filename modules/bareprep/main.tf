@@ -122,11 +122,11 @@ count = var.interface != "virtual" ? 1 : 0
 
 provisioner "local-exec" {
   command = <<EOF
-    sleep 10 ; virsh qemu-agent-command plopper '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "echo '\''auto lo eth0\niface lo inet loopback'\'' > /etc/network/interfaces"]}}'
-    virsh qemu-agent-command plopper '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "echo '\''allow-hotplug eth0\niface eth0 inet static\naddress ${var.ip}\nnetmask 255.255.255.255\ngateway ${var.gateway}'\'' >> /etc/network/interfaces"]}}'
-    virsh qemu-agent-command plopper '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "systemctl restart networking"]}}'
-    virsh qemu-agent-command plopper '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "echo '\''nameserver 8.8.8.8'\'' > /etc/resolv.conf"]}}'
-    virsh qemu-agent-command plopper '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "sleep 5 ; ifup eth0"]}}'
+    sleep 10 ; virsh qemu-agent-command ${var.vm} '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "echo '\''auto lo eth0\niface lo inet loopback'\'' > /etc/network/interfaces"]}}'
+    virsh qemu-agent-command ${var.vm} '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "echo '\''allow-hotplug eth0\niface eth0 inet static\naddress ${var.ip}\nnetmask 255.255.255.255\ngateway ${var.gateway}'\'' >> /etc/network/interfaces"]}}'
+    virsh qemu-agent-command ${var.vm} '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "systemctl restart networking"]}}'
+    virsh qemu-agent-command ${var.vm} '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "echo '\''nameserver 8.8.8.8'\'' > /etc/resolv.conf"]}}'
+    virsh qemu-agent-command ${var.vm} '{"execute":"guest-exec", "arguments":{"path":"/bin/sh", "arg":["-c", "sleep 5 ; ifup eth0"]}}'
   EOF
 }
   depends_on = [
