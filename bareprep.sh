@@ -9,8 +9,6 @@ unzip ${target} && rm -r ${target}
 chmod +x terraform
 virsh net-undefine default
 
-echo 'vm.max_map_count=262144' >> /etc/sysctl.conf
-
 ### Uncomment if the host isn't fresh
 #until virsh net-destroy default ; virsh pool-undefine default ; virsh pool-destroy default; do
 #echo "Removing default settings..."
