@@ -3,7 +3,7 @@
 version="1.4.6"
 target="terraform_${version}_linux_amd64.zip"
 
-apt update ; apt install screen unzip curl iptables-persistent cockpit cockpit-machines -y
+apt update ; apt install --install-recommends screen unzip curl iptables-persistent cockpit cockpit-machines -y
 cd /usr/local/bin || exit ; curl -LO https://releases.hashicorp.com/terraform/${version}/${target}
 unzip ${target} && rm -r ${target}
 chmod +x terraform
