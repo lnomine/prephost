@@ -32,9 +32,6 @@ chmod 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys
 systemctl restart sshd
 
-### role management
+### role management, specific usage
 
 /tmp/role.sh "$1"
-
-#cleanup
-rm -rf /root/debonair *.zip
