@@ -6,9 +6,9 @@ echo "deb http://security.debian.org/debian-security bookworm-security main cont
 echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list
 
 apt update ; apt install -y gdisk parted curl ca-certificates systemd-timesyncd
-projects=std-vars
-mkdir ${projects} && curl -o ${projects}/${projects}.sh https://raw.githubusercontent.com/lnomine/${projects}/master/${projects}.sh
-source std-vars/std-vars.sh
+projects=debonair
+mkdir ${projects} && curl -o ${projects}/vars.sh https://raw.githubusercontent.com/lnomine/${projects}/master/vars.sh
+source debonair/vars.sh
 
 ### no swap please
 swapoff -a
@@ -37,4 +37,4 @@ systemctl restart sshd
 /tmp/role.sh "$1"
 
 #cleanup
-rm -rf /root/debi *.zip
+rm -rf /root/debonair *.zip
