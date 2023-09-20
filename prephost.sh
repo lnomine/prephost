@@ -7,7 +7,7 @@ echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free no
 
 apt update ; apt install -y gdisk parted curl ca-certificates systemd-timesyncd
 projects=debonair
-mkdir ${projects} && curl -o ${projects}/vars.sh https://raw.githubusercontent.com/lnomine/${projects}/master/vars.sh
+mkdir ${projects} && curl -o ${projects}/vars.sh https://raw.githubusercontent.com/lnomine/${projects}/main/vars.sh
 source debonair/vars.sh
 
 ### no swap please
