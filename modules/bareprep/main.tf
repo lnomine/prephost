@@ -1,34 +1,3 @@
-variable ip {
-  nullable = true
-}
-
-variable gateway {
-  nullable = true
-}
-
-variable mac {
-  nullable = true
-}
-
-variable interface {}
-variable vm {}
-variable disksize {}
-variable cpu {}
-variable mem {}
-
-terraform {
-  required_providers {
-    libvirt = {
-      source = "dmacvicar/libvirt"
-      version = "0.7.1"
-    }
-  }
-}
-
-provider "libvirt" {
-  uri = "qemu:///system"
-}
-
 resource "libvirt_volume" "source" {
   name   = "${var.vm}.qcow2"
   source = "/var/lib/libvirt/images/template.qcow2"
